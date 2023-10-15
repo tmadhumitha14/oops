@@ -1,0 +1,87 @@
+# oops
+//phonenumberformat
+package phonenumberformat;
+
+import java.util.Scanner;
+
+
+public class Phonenumberformat {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+      Scanner scanner = new Scanner(System.in);
+        
+        while (true) {
+            System.out.print("Enter a 10-digit number (or '999' to quit): ");
+            String input = scanner.nextLine();
+            
+            if (input.equals("999")) {
+                System.out.println("Goodbye!");
+                break;
+            }
+            
+            // Remove any non-digit characters from the input
+            String digitsOnly = input.replaceAll("[^0-9]", "");
+            
+            if (digitsOnly.length() == 10) {
+                String formattedNumber = "(" + digitsOnly.substring(0, 3) + ") " +
+                                         digitsOnly.substring(3, 6) + "-" +
+                                         digitsOnly.substring(6, 10);
+                System.out.println("Formatted phone number: " + formattedNumber);
+            } else {
+                System.out.println("Error: Input must have exactly 10 digits.");
+            }
+        }
+        
+        scanner.close();
+    }
+    }
+
+//palndrome
+package palindromicsubstring;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class PalindromicSubstring {
+
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
+        scanner.close();
+
+        ArrayList<String> palindromes = new ArrayList<>();
+
+        for (int i = 0; i < input.length(); i++) {
+            for (int j = i + 1; j <= input.length(); j++) {
+                String sub = input.substring(i, j);
+                if (isPalindrome(sub) && sub.length() > 1) {
+                    palindromes.add(sub);
+                }
+            }
+        }
+
+        System.out.println("Palindromic substrings found: ");
+        for (int i = 0; i < palindromes.size(); i++) {
+            System.out.println((i + 1) + ". " + palindromes.get(i));
+        }
+        System.out.println("Total palindromic substrings: " + palindromes.size());
+    }
+
+    private static boolean isPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+    
+}
