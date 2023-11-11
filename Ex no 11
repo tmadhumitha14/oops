@@ -1,0 +1,99 @@
+# oops
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package databaseexample;
+
+
+
+import java.sql.*;
+
+public class DatabaseExample {
+    static final String JDBC_DRIVER = "org.sqlite.JDBC";
+    static final String DB_URL = "jdbc:sqlite:books.db";
+
+    public static void main(String[] args) {
+        Connection conn = null;
+        Statement stmt = null;
+
+        try {
+            // Register JDBC driver
+            Class.forName(JDBC_DRIVER);
+
+            // Open a connection
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL);
+
+            // Execute a query to create the table if not exists
+            stmt = conn.createStatement();
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS books " +
+                    "(id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    " title VARCHAR(255), " +
+                    " author VARCHAR(255), " +
+                    " price DOUBLE, " +
+                    " qty INTEGER)";
+            stmt.executeUpdate(createTableSQL);
+
+            // 1. SELECT * FROM books
+            System.out.println("1. SELECT * FROM books:");
+            String selectAllQuery = "SELECT * FROM books";
+            ResultSet resultSet = stmt.executeQuery(selectAllQuery);
+            printResultSet(resultSet);
+
+            // 2. SELECT title, author, price, qty FROM books WHERE author = 'Tan Ah Teck'
+            System.out.println("\n2. SELECT title, author, price, qty FROM books WHERE author = 'Tan Ah Teck':");
+            String selectAuthorQuery = "SELECT title, author, price, qty FROM books WHERE author = 'Tan Ah Teck'";
+            resultSet = stmt.executeQuery(selectAuthorQuery);
+            printResultSet(resultSet);
+
+            // 3. Increase the price by 50% for "A Cup of Java"
+            System.out.println("\n3. Increase the price by 50% for 'A Cup of Java':");
+            String updatePriceQuery = "UPDATE books SET price = price * 1.5 WHERE title = 'A Cup of Java'";
+            stmt.executeUpdate(updatePriceQuery);
+
+            // 4. Set the qty to 0 for "A Teaspoon of Java"
+            System.out.println("\n4. Set the qty to 0 for 'A Teaspoon of Java':");
+            String updateQtyQuery = "UPDATE books SET qty = 0 WHERE title = 'A Teaspoon of Java'";
+            stmt.executeUpdate(updateQtyQuery);
+
+            // 5. Delete all books with id = 8001
+            System.out.println("\n5. Delete all books with id = 8001:");
+            String deleteBookQuery = "DELETE FROM books WHERE id = 8001";
+            stmt.executeUpdate(deleteBookQuery);
+
+            // 6. insert: (8001, 'Java ABC', 'Kevin Jones', 15.55, 55) and (8002, 'Java XYZ', 'Kevin Jones', 25.55, 55)
+            System.out.println("\n6. Insert new books:");
+            String insertBooksQuery = "INSERT INTO books (id, title, author, price, qty) VALUES " +
+                    "(8001, 'Java ABC', 'Kevin Jones', 15.55, 55), " +
+                    "(8002, 'Java XYZ', 'Kevin Jones', 25.55, 55)";
+            stmt.executeUpdate(insertBooksQuery);
+
+            // Display the updated records
+            resultSet = stmt.executeQuery(selectAllQuery);
+            System.out.println("\nUpdated Records:");
+            printResultSet(resultSet);
+
+            // Clean-up environment
+            resultSet.close();
+            stmt.close();
+            conn.close();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void printResultSet(ResultSet resultSet) throws SQLException {
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String title = resultSet.getString("title");
+            String author = resultSet.getString("author");
+            double price = resultSet.getDouble("price");
+            int qty = resultSet.getInt("qty");
+
+            System.out.println("ID: " + id + ", Title: " + title + ", Author: " + author +
+                    ", Price: " + price + ", Quantity: " + qty);
+        }
+    }
+}
