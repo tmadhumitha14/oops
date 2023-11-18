@@ -1,0 +1,50 @@
+# oops
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
+public class SmileyEmoji extends JFrame {
+
+    public SmileyEmoji() {
+        setTitle("Smiley Emoji");
+        setSize(400, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        SmileyPanel smileyPanel = new SmileyPanel();
+        add(smileyPanel);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new SmileyEmoji();
+    }
+}
+
+class SmileyPanel extends JPanel {
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Draw face
+        g2d.setColor(Color.YELLOW);
+        g2d.fillOval(50, 50, 300, 300);
+
+        // Draw eyes
+        g2d.setColor(Color.BLACK);
+        g2d.fillOval(120, 120, 40, 40);
+        g2d.fillOval(240, 120, 40, 40);
+
+        // Draw mouth (smile)
+        g2d.setColor(Color.BLACK);
+        g2d.drawArc(120, 160, 160, 120, 0, -180);
+    }
+}
